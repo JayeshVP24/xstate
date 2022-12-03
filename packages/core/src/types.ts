@@ -1134,7 +1134,6 @@ export interface ActivityMap {
 export interface StateTransition<TContext, TEvent extends EventObject> {
   transitions: Array<TransitionDefinition<TContext, TEvent>>;
   configuration: Array<StateNode<TContext, any, TEvent, any, any, any>>;
-  entrySet: Array<StateNode<TContext, any, TEvent, any, any, any>>;
   exitSet: Array<StateNode<TContext, any, TEvent, any, any, any>>;
   /**
    * The source state that preceded the transition.
@@ -1377,7 +1376,11 @@ export interface PureAction<TContext, TEvent extends EventObject>
   get: (
     context: TContext,
     event: TEvent
-  ) => SingleOrArray<ActionObject<TContext, TEvent>> | undefined;
+  ) =>
+    | SingleOrArray<
+        ActionObject<TContext, TEvent> | ActionObject<TContext, TEvent>['type']
+      >
+    | undefined;
 }
 
 export interface ChooseAction<TContext, TEvent extends EventObject>
