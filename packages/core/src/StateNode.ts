@@ -1092,7 +1092,11 @@ class StateNode<
           this.machine.options.actions as any
         );
       })
-      .concat([doneEvents.map(raise) as Array<ActionObject<TContext, TEvent>>]);
+      .concat([
+        doneEvents.map((event) => raise(event)) as Array<
+          ActionObject<TContext, TEvent>
+        >
+      ]);
 
     const exitActions = Array.from(exitStates).map((stateNode) =>
       toActionObjects(
