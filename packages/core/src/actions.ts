@@ -163,8 +163,8 @@ export function raise<
   TExpressionEvent extends EventObject,
   TEvent extends EventObject = TExpressionEvent
 >(
-  event: NoInfer<TEvent> //| ((ctx: TContext, ev: TExpressionEvent) => TEvent)
-  // options?: RaiseActionOptions<TContext, TExpressionEvent>
+  event: NoInfer<TEvent>,
+  options?: RaiseActionOptions<TContext, TExpressionEvent>
 ): RaiseAction<TContext, TExpressionEvent, TEvent> {
   if (!isString(event) || options) {
     return send(event, { ...options, to: SpecialTargets.Internal }) as any;

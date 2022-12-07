@@ -127,9 +127,9 @@ export type Action<
   TExpressionEvent extends EventObject,
   TEvent extends EventObject = TExpressionEvent
 > =
-  // | ActionType
-  ActionObject<TContext, TExpressionEvent, TEvent>;
-// | ActionFunction<TContext, TExpressionEvent, BaseActionObject, TEvent>;
+  | ActionType
+  | ActionObject<TContext, TExpressionEvent, TEvent>
+  | ActionFunction<TContext, TExpressionEvent, BaseActionObject, TEvent>;
 
 /**
  * Extracts action objects that have no extra properties.
@@ -156,14 +156,16 @@ export type BaseAction<
 > =
   | SimpleActionsOf<TAction>['type']
   | TAction
+  | CancelAction
   | RaiseAction<TContext, TExpressionEvent, TEvent>
-  // | SendAction<TContext, TEvent, any>
-  | AssignAction<TContext, TExpressionEvent, TEvent>;
-// | LogAction<TContext, TExpressionEvent, TEvent>
-// | CancelAction
-// | StopAction<TContext, TExpressionEvent, TEvent>
-// | ChooseAction<TContext, TExpressionEvent, TEvent>
-// | ActionFunction<TContext, TExpressionEvent, TEvent>;
+  | SendAction<TContext, TEvent, any>
+  | AssignAction<TContext, TExpressionEvent, TEvent>
+  // TODO: those might need to receive `TEvent` as well
+  // it might be required to type the ActionMeta in them properly
+  | LogAction<TContext, TExpressionEvent>
+  | StopAction<TContext, TExpressionEvent>
+  | ChooseAction<TContext, TExpressionEvent>
+  | ActionFunction<TContext, TExpressionEvent>;
 
 export type BaseActions<
   TContext,
@@ -1196,15 +1198,6 @@ export interface RaiseAction<
   TEvent extends EventObject = TExpressionEvent
 > extends ActionObject<TContext, TExpressionEvent, TEvent> {
   type: ActionTypes.Raise;
-  // event: TEvent;
-  // ctx: TContext;
-  // _exprEvent: TExpressionEvent;
-  assignment: (
-    ctx: TContext,
-    event: TExpressionEvent,
-    _meta: State<TContext, TEvent>
-  ) => TEvent;
-  // (ctx: TContext, event: TExpressionEvent): TEvent;
 }
 
 export interface RaiseActionObject<TEvent extends EventObject> {
@@ -1361,8 +1354,8 @@ export interface CancelAction extends ActionObject<any, any> {
 
 export type Assigner<TContext, TEvent extends EventObject> = (
   context: TContext,
-  event: TEvent
-  // meta: AssignMeta<TContext, TEvent>
+  event: TEvent,
+  meta: AssignMeta<TContext, TEvent>
 ) => Partial<TContext>;
 
 export type PartialAssigner<
@@ -1371,8 +1364,8 @@ export type PartialAssigner<
   TKey extends keyof TContext
 > = (
   context: TContext,
-  event: TEvent
-  // meta: AssignMeta<TContext, TEvent>
+  event: TEvent,
+  meta: AssignMeta<TContext, TEvent>
 ) => TContext[TKey];
 
 export type PropertyAssigner<TContext, TEvent extends EventObject> = {
