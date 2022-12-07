@@ -8,7 +8,7 @@ import {
   spawn,
   ActorRefFrom
 } from '../src/index';
-import { raise } from '../src/actions';
+import { raise, send } from '../src/actions';
 import { createModel } from '../src/model';
 
 function noop(_x: unknown) {
@@ -251,31 +251,45 @@ describe('Raise events', () => {
           on: {
             DECIDE: [
               {
+                // actions: raise({
+                //   type: 'ALOHA'
+                // }),
                 actions: raise({
                   type: 'ALOHA'
-                }),
-                cond: (_ctx, ev) => !!ev.aloha
-              },
+                })
+                // cond: (_ctx, ev) => !!ev.aloha
+              }
+              // {
+              //   actions: raise({
+              //     type: 'MORNING'
+              //   }),
+              //   cond: (ctx) => ctx.hour < 12
+              // },
+              // {
+              //   actions: raise({
+              //     type: 'AFTERNOON'
+              //   }),
+              //   cond: (ctx) => ctx.hour < 18
+              // },
+              // {
+              //   actions: raise({ type: 'EVENING' }),
+              //   cond: (ctx) => ctx.hour < 22
+              // }
+            ]
+          }
+        },
+        morning: {
+          on: {
+            DECIDE: [
               {
-                actions: raise({
-                  type: 'MORNING'
+                actions: assign((ctx, ev) => {
+                  return {};
                 }),
-                cond: (ctx) => ctx.hour < 12
-              },
-              {
-                actions: raise({
-                  type: 'AFTERNOON'
-                }),
-                cond: (ctx) => ctx.hour < 18
-              },
-              {
-                actions: raise({ type: 'EVENING' }),
-                cond: (ctx) => ctx.hour < 22
+                cond: () => true
               }
             ]
           }
         },
-        morning: {},
         lunchTime: {},
         afternoon: {},
         evening: {},

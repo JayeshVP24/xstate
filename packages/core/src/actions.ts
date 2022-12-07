@@ -41,7 +41,8 @@ import {
   EventFrom,
   AnyActorRef,
   PredictableActionArgumentsExec,
-  RaiseActionOptions
+  RaiseActionOptions,
+  NoInfer
 } from './types';
 import * as actionTypes from './actionTypes';
 import {
@@ -157,10 +158,14 @@ export function toActivityDefinition<TContext, TEvent extends EventObject>(
  *
  * @param eventType The event to raise.
  */
-export function raise<TContext, TEvent extends EventObject>(
-  event: Event<TEvent>,
-  options?: RaiseActionOptions<TContext, TEvent>
-): RaiseAction<TEvent> {
+export function raise<
+  TContext,
+  TExpressionEvent extends EventObject,
+  TEvent extends EventObject = TExpressionEvent
+>(
+  event: NoInfer<TEvent> //| ((ctx: TContext, ev: TExpressionEvent) => TEvent)
+  // options?: RaiseActionOptions<TContext, TExpressionEvent>
+): RaiseAction<TContext, TExpressionEvent, TEvent> {
   if (!isString(event) || options) {
     return send(event, { ...options, to: SpecialTargets.Internal }) as any;
   }
@@ -468,9 +473,15 @@ export function resolveStop<TContext, TEvent extends EventObject>(
  *
  * @param assignment An object that represents the partial context to update.
  */
-export const assign = <TContext, TEvent extends EventObject = EventObject>(
-  assignment: Assigner<TContext, TEvent> | PropertyAssigner<TContext, TEvent>
-): AssignAction<TContext, TEvent> => {
+export const assign = <
+  TContext,
+  TExpressionEvent extends EventObject = EventObject,
+  TEvent extends EventObject = TExpressionEvent
+>(
+  assignment:
+    | Assigner<TContext, TExpressionEvent>
+    | PropertyAssigner<TContext, TExpressionEvent>
+): AssignAction<TContext, TExpressionEvent, TEvent> => {
   return {
     type: actionTypes.assign,
     assignment
