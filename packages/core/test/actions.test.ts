@@ -490,7 +490,7 @@ describe('entry/exit actions', () => {
 
       const pingPong = createMachine({
         initial: 'ping',
-        key: 'machine',
+        id: 'machine',
         states: {
           ping: {
             entry: ['entryEvent'],
@@ -2692,9 +2692,6 @@ describe('raise', () => {
     const service = interpret(machine).start();
 
     service.onDone(() => done());
-
-    // Ensures that the delayed self-event is sent when in the `b` state
-    service.send({ type: 'TO_B' });
 
     setTimeout(() => {
       // didn't transition yet
