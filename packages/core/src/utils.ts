@@ -2,7 +2,6 @@ import { AnyState } from '.';
 import { errorExecution, errorPlatform } from './actionTypes';
 import { NULL_EVENT, STATE_DELIMITER, TARGETLESS_KEY } from './constants';
 import { IS_PRODUCTION } from './environment';
-import { StateMachine } from './StateMachine';
 import type { StateNode } from './StateNode';
 import type {
   Behavior,
@@ -25,7 +24,6 @@ import type {
   TransitionConfig,
   TransitionConfigTarget
 } from './types';
-import { AnyStateMachine } from './types';
 
 export function keys<T extends object>(value: T): Array<keyof T & string> {
   return Object.keys(value) as Array<keyof T & string>;
@@ -425,8 +423,7 @@ export function toTransitionConfigArray<
 >(
   event: TEvent['type'] | typeof NULL_EVENT | '*',
   configLike: SingleOrArray<
-    | TransitionConfig<TContext, TEvent>
-    | TransitionConfigTarget<TContext, TEvent>
+    TransitionConfig<TContext, TEvent> | TransitionConfigTarget
   >
 ): Array<
   TransitionConfig<TContext, TEvent> & {
