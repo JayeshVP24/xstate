@@ -1,5 +1,11 @@
 # @xstate/fsm
 
+## 2.1.0-alpha.0
+
+### Minor Changes
+
+- [#3727](https://github.com/statelyai/xstate/pull/3727) [`5fb3c683d`](https://github.com/statelyai/xstate/commit/5fb3c683d9a9bdc06637b3a13a5b575059aebadd) Thanks [@Andarist](https://github.com/Andarist)! - `exports` field has been added to the `package.json` manifest. It limits what files can be imported from a package - it's no longer possible to import from files that are not considered to be a part of the public API.
+
 ## 2.0.0
 
 ### Major Changes
